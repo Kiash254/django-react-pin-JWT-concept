@@ -18,7 +18,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser):
     phone = models.CharField(max_length=15, unique=True)
-    pin = models.CharField(max_length=6)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

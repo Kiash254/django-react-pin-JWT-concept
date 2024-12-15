@@ -11,13 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-z(oog%a(k2vpicg=l&ak2!sp38q3n%4@9wn%9+bk2i0vzh=2j4'
@@ -25,47 +22,65 @@ SECRET_KEY = 'django-insecure-z(oog%a(k2vpicg=l&ak2!sp38q3n%4@9wn%9+bk2i0vzh=2j4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Allowed hosts for deployment
 ALLOWED_HOSTS = []
 
-
 # Application definition
-
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    #Apps installation
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'core',
+    'django.contrib.admin',          # Admin interface
+    'django.contrib.auth',           # Auth system
+    'django.contrib.contenttypes',  # Content type framework
+    'django.contrib.sessions',      # Session framework
+    'django.contrib.messages',      # Messaging framework
+    'django.contrib.staticfiles',   # Static files (CSS, JS, images)
+    # Third-party apps
+    'rest_framework',               # Django REST framework
+    'rest_framework_simplejwt',     # JWT authentication
+    'core',                         # Your custom app
+    'corsheaders',                  # CORS headers for frontend access
+]
+
+# CORS settings to allow frontend access
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Frontend URL
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',  # Security middleware
+    'corsheaders.middleware.CorsMiddleware',        # CORS middleware
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Session handling
+    'django.middleware.common.CommonMiddleware',    # Common middleware
+    'django.middleware.csrf.CsrfViewMiddleware',   # CSRF protection
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # User authentication
+    'django.contrib.messages.middleware.MessageMiddleware',  # Message handling
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Frame options
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'core.CustomUser'
+
+# Root URL configuration
+ROOT_URLCONF = 'config.urls'
+
+# REST framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
-AUTH_USER_MODEL = 'core.CustomUser'
-ROOT_URLCONF = 'config.urls'
+# JWT Configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Access token lifespan
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Refresh token lifespan
+}
 
+# Templates configuration
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Django's template engine
+        'DIRS': [],  # Template directories
+        'APP_DIRS': True,  # Load templates from installed apps
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -77,57 +92,41 @@ TEMPLATES = [
     },
 ]
 
+# WSGI application
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # SQLite database engine
+        'NAME': BASE_DIR / 'db.sqlite3',  # Database file path
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # Similarity validation
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # Minimum length validation
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # Common password validation
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # Numeric password validation
     },
 ]
 
+# Internationalization settings
+LANGUAGE_CODE = 'en-us'  # Language code
+TIME_ZONE = 'UTC'  # Time zone
+USE_I18N = True  # Internationalization enabled
+USE_TZ = True  # Time zone awareness enabled
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
+# Static files settings
+STATIC_URL = 'static/'  # URL for accessing static files
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'  # Default field type for auto-incremented IDs
