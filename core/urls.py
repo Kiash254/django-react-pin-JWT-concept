@@ -3,8 +3,8 @@ from .views import RegisterView, LoginView, PinResetView, HomeView
 
 
 urlpatterns = [
-    path('register/', RegisterView, name='register'),
-    path('login/', LoginView, name='login'),
-    path('pin-reset/', PinResetView, name='pin-reset'),
-    path('home/', HomeView, name='home'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('pin-reset/', PinResetView.as_view(), name='pin-reset'),
+    path('home/', HomeView.as_view(), name='home'),
 ]
